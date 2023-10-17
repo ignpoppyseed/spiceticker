@@ -11,6 +11,9 @@
             animation: bgslide 360s linear infinite;
             height: 100%;
         }
+        .noscroll {
+            animation: none;
+        }
         html, body {
             margin: 0;
         }
@@ -93,11 +96,17 @@
             border-radius: var(--br);
             padding: var(--padd);
             display: flex;
+            flex-direction: column;
         }
         #menu.activated {
             opacity: 100%;
             pointer-events: all;
         }
+        .menuitem {
+            /* flex-basis: 100%; */
+            flex-direction: row;
+        }
+        #seconds { width: 5em;}
     </style>
 </head>
 <body>
@@ -124,9 +133,16 @@
         <source src="media/sillypants.ogg" type="audio/ogg">
     </audio>
     <div id="menu">
-        <label for="seconds">refresh seconds:</label>
-        <input type="number" id="seconds" name="quantity" min="1">
-        <button onclick="set_refresh()">set</button>
+        <div class="menuitem">
+            <label for="seconds">refresh seconds:</label>
+            <input type="number" id="seconds" name="refresh" min="1">
+            <button onclick="set_refresh()">set</button>
+        </div>
+        <div class="menuitem">
+            <label for="bgscroll">scroll background:</label>
+            <input type="checkbox" id="bgscroll" name="bgscroll" checked onclick="scroll_bg_toggle()">
+            <!-- <button onclick="set_refresh()">set</button> -->
+        </div>
     </div>
 </body>
 <script>
@@ -198,5 +214,17 @@
     function toggleFullscreen() {
         if ( !b_isFullscreen ) { fullscreen(); b_isFullscreen = true; }
         else { exitFullscreen(); b_isFullscreen = false; }
+    }
+    var bgscroll = document.getElementById('bgscroll')
+    var bgscrollb = true
+    if (!localStorage.bgscroll) { localStorage.bgscroll = bgscrollb }
+    else {bgscrollb = localStorage.bgscroll}
+    bgscroll.checked = bgscrollb
+    function scroll_bg_toggle() {
+        if (bgscrollb) { document.documentElement.classList.add('noscroll') }
+        else { document.documentElement.classList.remove('noscroll') }
+        bgscrollb = bgscroll.checked
+        localStorage.bgscroll = bgscrollb
+        // console.log(bgscroll.checked)
     }
 </script>
