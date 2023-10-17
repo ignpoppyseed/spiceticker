@@ -218,7 +218,8 @@
     var bgscroll = document.getElementById('bgscroll')
     var bgscrollb
     if (localStorage.bgscroll == null) { localStorage.bgscroll = true }
-    if (!localStorage.bgscroll) { 
+    if (localStorage.bgscroll == 'false' || localStorage.bgscroll == false) { 
+        console.log('uwu')
         bgscrollb = false; 
         bgscroll.checked = false
         document.documentElement.classList.add('noscroll')
