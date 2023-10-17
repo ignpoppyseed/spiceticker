@@ -1,0 +1,202 @@
+<!doctype html>
+<head>
+    <style>
+        html {
+            font-family: Papyrus, serif;
+            color: #71441a;
+            /* color: #464D77; */
+            background-color: #d5b069;
+            background-image: url('media/bg.webp');
+            background-repeat: no-repeat ;
+            animation: bgslide 360s linear infinite;
+            height: 100%;
+        }
+        html, body {
+            margin: 0;
+        }
+        @keyframes bgslide {
+            0% { background-position: 100% 0%; }
+            33% { background-position: 0% 100%; }
+            66% { background-position: 100% 100%; }
+            100% { background-position: 100% 0%; }
+            /* 0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; } */
+        }
+        :root {
+            --br: 15px;
+            --padd: 15px;
+        }
+        .spice {
+            width: fit-content;
+            min-width: 200px;
+            display: flex;
+            border: 1px solid #71441a;
+            border-radius: var(--br);
+            /* margin: 5px; */
+            box-shadow: 5px 5px 8px rgb(0, 0, 0, 0.5);
+            background-color: #f3dfba;
+        }
+        .spice > p {
+            margin: 10px;
+            margin-bottom: 5px;
+        }
+        .spice {
+            margin-bottom: var(--padd);
+        }
+        .spice :first-child {margin-right: 0px !important;}
+        .spice :last-child {margin-left: 0px !important;}
+        /* .spicebox {
+            width: fit-content;
+            margin-bottom: 8px;
+            border: 1px solid black;
+            border-radius: calc(var(--br) + var(--padd));
+            padding: var(--padd);
+        } */
+        .dark {
+            height: 100vh;
+            width: 100vw;
+            background-color: rgba(0, 0, 0, 0.50);
+            position: absolute;
+            z-index: -1;
+        }
+        .buttons {
+            width: 75px;
+            aspect-ratio: 16/9;
+            margin: 0;
+        }
+        #buttons:hover {
+            opacity: 100%;
+        }
+        #buttons {
+            transition: opacity 0.5s;
+            opacity: 0;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: fit-content;
+            display: flex;
+        }
+        #menu {
+            color: white;
+            width: fit-content;
+            /* height: 100px; */
+            background-color: rgba(0, 0, 0, 0.50);
+            opacity: 0%;
+            pointer-events: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            border: 0px transparent;
+            border-radius: var(--br);
+            padding: var(--padd);
+            display: flex;
+        }
+        #menu.activated {
+            opacity: 100%;
+            pointer-events: all;
+        }
+    </style>
+</head>
+<body>
+    <div class="dark"></div>
+    <div style="padding: 10px;">
+    <div class="spicebox">
+        <div class="spice">
+            <p>cinnamon $</p><p id="spice_val_1">2</p>
+        </div>
+    </div>
+    <div class="spicebox">
+        <div class="spice">
+            <p>black pepper $</p><p id="spice_val_2">1</p>
+        </div>
+    </div>  
+    </div>
+    <div id="buttons">
+        <button class="buttons" onclick="sillypants()">toggle music</button>
+        <button class="buttons" onclick="toggleFullscreen()">toggle fullscreen</button>
+        <button class="buttons" onclick="menu_toggle()">menu</button>
+    </div>
+    <audio id="sillyaudio" loop>
+        <source src="media/sillypants.mp3" type="audio/mpeg">
+        <source src="media/sillypants.ogg" type="audio/ogg">
+    </audio>
+    <div id="menu">
+        <label for="seconds">refresh seconds:</label>
+        <input type="number" id="seconds" name="quantity" min="1">
+        <button onclick="set_refresh()">set</button>
+    </div>
+</body>
+<script>
+    var refresh_rate = 1000
+    var seconds_input = document.getElementById('seconds')
+    if (!localStorage.refresh) { localStorage.refresh = refresh_rate }
+    seconds_input.value = localStorage.refresh/1000
+    refresh_rate = parseInt(localStorage.refresh)
+    function randomnum(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    var elements = document.querySelectorAll('[id^=spice_val_]');
+
+    // var times_looped = 1;
+
+    function updater() { 
+        // console.log('ran updater')
+        for (el of elements) {
+            var new_value = (parseFloat(el.innerText) * randomnum(0.95, 0.99)).toFixed(2)
+            if (new_value < 0.10) { clearInterval(interval)}
+            else { el.innerText = new_value }
+        }
+
+    }
+
+    var interval = setInterval(updater, refresh_rate); //1000
+
+    function sillypants() {
+        var audio = document.getElementById('sillyaudio')
+        audio.paused?audio.play():audio.pause()
+    }
+    var menustate = false
+    var menu = document.getElementById('menu')
+
+    function menu_toggle() {
+        if (!menustate) { menu.classList.add('activated'); menustate = !menustate } else { menu.classList.remove('activated'); menustate = !menustate }
+    }
+
+    document.addEventListener("keydown", (event) => {
+        // console.log(event.key)
+        if (event.key == 'Escape') {menu_toggle()}
+        else if (event.key == 'f') {toggleFullscreen()}
+        // console.log(menu)
+    });
+    function set_refresh() {
+        clearInterval(interval)
+        // console.log(refresh_rate)
+        refresh_rate = parseInt(seconds_input.value * 1000)
+        // console.log(refresh_rate)
+        localStorage.refresh = refresh_rate
+        interval = setInterval(updater, refresh_rate); //1000
+    }
+    var b_isFullscreen = false;
+
+    function fullscreen() {
+        var elem = document.documentElement;
+        if ( elem.requestFullscreen ) { elem.requestFullscreen(); }
+        else if ( elem.webkitRequestFullscreen ) { elem.webkitRequestFullscreen(); }
+        else if ( elem.msRequestFullscreen ) { elem.msRequestFullscreen(); }
+    }
+
+    function exitFullscreen() {
+        if ( document.exitFullscreen ) { document.exitFullscreen(); }
+        else if ( document.webkitExitFullscreen ) { document.webkitExitFullscreen(); }
+        else if ( document.msExitFullscreen ) { document.msExitFullscreen(); }
+    }
+
+    function toggleFullscreen() {
+        if ( !b_isFullscreen ) { fullscreen(); b_isFullscreen = true; }
+        else { exitFullscreen(); b_isFullscreen = false; }
+    }
+</script>
