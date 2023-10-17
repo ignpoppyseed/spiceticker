@@ -216,14 +216,18 @@
         else { exitFullscreen(); b_isFullscreen = false; }
     }
     var bgscroll = document.getElementById('bgscroll')
-    var bgscrollb = true
-    if (!localStorage.bgscroll) { localStorage.bgscroll = bgscrollb }
-    else {bgscrollb = localStorage.bgscroll}
-    bgscroll.checked = bgscrollb
+    var bgscrollb
+    if (localStorage.bgscroll == null) { localStorage.bgscroll = true }
+    if (!localStorage.bgscroll) { 
+        bgscrollb = false; 
+        bgscroll.checked = false
+        document.documentElement.classList.add('noscroll')
+    }
+    if (bgscrollb == null) { bgscrollb = true; }
     function scroll_bg_toggle() {
         if (bgscrollb) { document.documentElement.classList.add('noscroll') }
         else { document.documentElement.classList.remove('noscroll') }
-        bgscrollb = bgscroll.checked
+        bgscrollb = !bgscrollb
         localStorage.bgscroll = bgscrollb
         // console.log(bgscroll.checked)
     }
