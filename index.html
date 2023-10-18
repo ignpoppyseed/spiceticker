@@ -1,23 +1,44 @@
 <!doctype html>
 <head>
+    <title>spiceticker • by emmaline</title>
+    <link rel="icon" type="image/x-icon" href="media/jar.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="spiceticker • by emmaline" property="og:title">
+    <meta content=":3" property="og:description">
+    <!--  -->
+    <meta name="theme-color" content="#67553a">
     <style>
         html {
-            font-family: Papyrus, serif;
+            font-family: Papyrus, Algerian;
             color: #71441a;
             /* color: #464D77; */
             background-color: #d5b069;
-            background-image: url('media/bg.webp');
+            background-image: url('media/bg.png');
             background-repeat: no-repeat ;
             animation: bgslide 360s linear infinite;
             height: 100%;
+            background-size: 150%;
         }
         .noscroll {
             animation: none;
-            background-size: auto;
             background-position: center;
+            background-size:cover;
         }
         html, body {
             margin: 0;
+            min-height: 100vh;
+            height: fit-content;
+        }
+        /* html {
+            display: flex;
+            align-items: center;
+        } */
+        body {
+            position: relative;
+            display: flex;
+            align-items: center;
+            min-height: 100vh;
+            height: fit-content;
         }
         @keyframes bgslide {
             0% { background-position: 100% 0%; }
@@ -33,33 +54,39 @@
             --padd: 15px;
         }
         .spice {
+            font-size: large;
             width: fit-content;
-            min-width: 200px;
+            min-width: 215px;
+            min-height: 50px;
             display: flex;
             border: 1px solid #71441a;
             border-radius: var(--br);
             /* margin: 5px; */
             box-shadow: 5px 5px 8px rgb(0, 0, 0, 0.5);
             background-color: #f3dfba;
+            align-items: center;
         }
         .spice > p {
-            margin: 10px;
-            margin-bottom: 5px;
+            margin: 0;
+            margin-left: 10px;
+            height: fit-content;
         }
         .spice {
             margin-bottom: var(--padd);
+            margin-right: calc(var(--padd) / 2);
+            margin-left: calc(var(--padd) / 2);
         }
         .spice :first-child {margin-right: 0px !important;}
         .spice :last-child {margin-left: 0px !important;}
-        /* .spicebox {
+        .spicebox {
             width: fit-content;
-            margin-bottom: 8px;
+            /* margin-bottom: 8px;
             border: 1px solid black;
             border-radius: calc(var(--br) + var(--padd));
-            padding: var(--padd);
-        } */
+            padding: var(--padd); */
+        }
         .dark {
-            height: 100vh;
+            height: 100%;
             width: 100vw;
             background-color: rgba(0, 0, 0, 0.50);
             position: absolute;
@@ -76,7 +103,7 @@
         #buttons {
             transition: opacity 0.5s;
             opacity: 0;
-            position: absolute;
+            position: fixed;
             bottom: 0;
             right: 0;
             width: fit-content;
@@ -89,7 +116,7 @@
             background-color: rgba(0, 0, 0, 0.50);
             opacity: 0%;
             pointer-events: none;
-            position: absolute;
+            position: fixed;
             top: 50%;
             left: 50%;
             -ms-transform: translate(-50%, -50%);
@@ -109,22 +136,68 @@
             flex-direction: row;
         }
         #seconds { width: 5em;}
+        a {color: inherit; transition: color 0.2s;}
+        a:visited {color: inherit;}
+        a:hover {color: gray;}
+        .credititem > * {
+            margin: 0;
+        }
+        #spices {
+            padding: 10px;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            /* max-height: 100vh; */
+            width: fit-content;
+            height: fit-content;
+            margin-bottom: 0;
+            padding-bottom: 0;
+            /* align-items: center; */
+            justify-content: center;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
-    <div class="dark"></div>
-    <div style="padding: 10px;">
-    <div class="spicebox">
-        <div class="spice">
-            <p>cinnamon $</p><p id="spice_val_1">2</p>
-        </div>
-    </div>
-    <div class="spicebox">
-        <div class="spice">
-            <p>black pepper $</p><p id="spice_val_2">1</p>
-        </div>
+    <div id="spices">
+        <!-- <div class="spicebox"> <div class="spice"> <p>Paprika:       $</p><p>22</p> </div> </div> -->
+        <!-- <div class="spicebox"> <div class="spice"> <p>Clove:         $</p><p>24</p> </div> </div> -->
+
+        <div class="spicebox"> <div class="spice"> <p>Black Pepper:  $</p><p class="spice_price">15</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Cinnamon:      $</p><p class="spice_price">23</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Turmeric:      $</p><p class="spice_price">29</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Cardamom:      $</p><p class="spice_price">26</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Cloves:        $</p><p class="spice_price">28</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Cayenne:       $</p><p class="spice_price">25</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Coriander:     $</p><p class="spice_price">27</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Nutmeg:        $</p><p class="spice_price">24</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Saffron:       $</p><p class="spice_price">28</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Chili Powder:  $</p><p class="spice_price">21</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Garlic Powder: $</p><p class="spice_price">30</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Parsley:       $</p><p class="spice_price">23</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Rosemary:      $</p><p class="spice_price">29</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Ginger:        $</p><p class="spice_price">26</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Thyme:         $</p><p class="spice_price">20</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Cumin:         $</p><p class="spice_price">27</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Fennel:        $</p><p class="spice_price">25</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Ras el Hanout: $</p><p class="spice_price">21</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Curry Powder:  $</p><p class="spice_price">28</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Dill:          $</p><p class="spice_price">26</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Oregano:       $</p><p class="spice_price">24</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Mustard:       $</p><p class="spice_price">22</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Basil:         $</p><p class="spice_price">29</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Chives:        $</p><p class="spice_price">20</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Peppermint:    $</p><p class="spice_price">27</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Sage:          $</p><p class="spice_price">25</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Tarragon:      $</p><p class="spice_price">23</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Vanilla:       $</p><p class="spice_price">21</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Caraway:       $</p><p class="spice_price">28</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Paprika:       $</p><p class="spice_price">26</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Bay Leaf:      $</p><p class="spice_price">22</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Chili Flakes:  $</p><p class="spice_price">29</p> </div> </div>
+        <div class="spicebox"> <div class="spice"> <p>Allspice:      $</p><p class="spice_price">20</p> </div> </div>
+
     </div>  
-    </div>
     <div id="buttons">
         <button class="buttons" onclick="sillypants()">toggle music</button>
         <button class="buttons" onclick="toggleFullscreen()">toggle fullscreen</button>
@@ -134,6 +207,11 @@
         <source src="media/sillypants.mp3" type="audio/mpeg">
         <source src="media/sillypants.ogg" type="audio/ogg">
     </audio>
+    <!-- <audio id="dingaudio">
+        <source src="media/ding.mp3" type="audio/mpeg">
+        <source src="media/ding.ogg" type="audio/ogg">
+    </audio> -->
+    <audio id="dingaudio" src="media/ding.mp3" type="audio/mpeg"></audio>
     <div id="menu">
         <div class="menuitem">
             <label for="seconds">refresh seconds:</label>
@@ -145,7 +223,21 @@
             <input type="checkbox" id="bgscroll" name="bgscroll" checked onclick="scroll_bg_toggle()">
             <!-- <button onclick="set_refresh()">set</button> -->
         </div>
+        <div class="menuitem">
+            <label for="dingtoggle">ding on update:</label>
+            <input type="checkbox" id="dingtoggle" name="dingtoggle" onclick="ding_toggle()">
+            <!-- <button onclick="set_refresh()">set</button> -->
+        </div>
+        <div class="menuitem">
+            <label for="dingvolume">ding volume:</label>
+            <input type="number" step="0.1" id="dingvolume" name="refresh" min="0.1" max="1" value="0.1" oninput="ding_vol_handle()">
+            <!-- <button onclick="set_refresh()">set</button> -->
+        </div>
+        <div class="menuitem credititem">
+            <p>made by <a href="https://emmaline.app" target="_blank">emmaline</a></p>
+        </div>
     </div>
+    <div class="dark"></div>
 </body>
 <script>
     var refresh_rate = 1000
@@ -157,7 +249,8 @@
         return Math.random() * (max - min) + min;
     }
 
-    var elements = document.querySelectorAll('[id^=spice_val_]');
+    // var elements = document.querySelectorAll('[id^=spice_val_]');
+    var elements = document.querySelectorAll('.spice_price');
 
     // var times_looped = 1;
 
@@ -167,6 +260,9 @@
             var new_value = (parseFloat(el.innerText) * randomnum(0.95, 0.99)).toFixed(2)
             if (new_value < 0.10) { clearInterval(interval)}
             else { el.innerText = new_value }
+        }
+        if (dingtoggled) {
+            play_ding()
         }
 
     }
@@ -221,17 +317,60 @@
     var bgscrollb
     if (localStorage.bgscroll == null) { localStorage.bgscroll = true }
     if (localStorage.bgscroll == 'false' || localStorage.bgscroll == false) { 
-        console.log('uwu')
+        // console.log('uwu')
         bgscrollb = false; 
         bgscroll.checked = false
         document.documentElement.classList.add('noscroll')
+    } else {
+        bgscrollb = true; 
+        bgscroll.checked = true
     }
-    if (bgscrollb == null) { bgscrollb = true; }
+    // if (bgscrollb == null) { bgscrollb = true; }
     function scroll_bg_toggle() {
         if (bgscrollb) { document.documentElement.classList.add('noscroll') }
         else { document.documentElement.classList.remove('noscroll') }
         bgscrollb = !bgscrollb
         localStorage.bgscroll = bgscrollb
         // console.log(bgscroll.checked)
+    }
+
+    var ding_volume = 0.3
+
+    var dingtoggle = document.getElementById('dingtoggle')
+    var dingtoggled
+    if (localStorage.dingtoggled == null) { localStorage.dingtoggled = false }
+    if (localStorage.dingtoggled == 'true' || localStorage.dingtoggled == true) { 
+        dingtoggled = true; 
+        dingtoggle.checked = true
+    } else {
+        dingtoggled = false;
+        dingtoggle.checked = false
+    }
+    // if (dingtoggled == null) { dingtoggled = false; }
+    function ding_toggle() {
+        dingtoggled = !dingtoggled
+        localStorage.dingtoggled = dingtoggled
+        if (dingtoggled) {play_ding()}
+    }
+
+    function play_ding() {
+        var ding = new Audio();
+        ding.src = document.getElementById('dingaudio').src;
+        ding.volume = ding_volume;
+        ding.play()
+    }
+
+    var dingvolume = document.getElementById('dingvolume')
+    // var dingtoggled
+    if (localStorage.ding_volume == null) { 
+        localStorage.ding_volume = ding_volume 
+        dingvolume.value = localStorage.ding_volume
+    } else {
+        ding_volume = parseFloat(localStorage.ding_volume)
+        dingvolume.value = localStorage.ding_volume
+    }
+    function ding_vol_handle() {
+        ding_volume = parseFloat(dingvolume.value)
+        localStorage.ding_volume = ding_volume 
     }
 </script>
