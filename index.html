@@ -353,13 +353,6 @@
         if (dingtoggled) {play_ding()}
     }
 
-    function play_ding() {
-        var ding = new Audio();
-        ding.src = document.getElementById('dingaudio').src;
-        ding.volume = ding_volume;
-        ding.play()
-    }
-
     var dingvolume = document.getElementById('dingvolume')
     // var dingtoggled
     if (localStorage.ding_volume == null) { 
@@ -371,6 +364,16 @@
     }
     function ding_vol_handle() {
         ding_volume = parseFloat(dingvolume.value)
+        if (ding_volume > 1) { ding_volume = 1; dingvolume.value = ding_volume }
         localStorage.ding_volume = ding_volume 
+    }
+
+    function play_ding() {
+        var ding = new Audio();
+        ding.src = document.getElementById('dingaudio').src;
+        if ( ding_volume > 1 ) { ding_volume = 1 }
+        dingvolume.value = ding_volume
+        ding.volume = ding_volume;
+        ding.play()
     }
 </script>
